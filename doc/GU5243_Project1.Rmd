@@ -1,0 +1,8 @@
+---
+title: "GU5243 Project1 Data Story"
+output: html_notebook
+---
+#Introduction
+Philosophy is the systematized study of general and fundamental questions. There are more than 100 different schools of philosophy in the world. Some of them are interested in natural question, such as astronomy, medicine and physics. Others discuss the questions like psychology, sociology and economics, etc. 
+
+In our Philosophy Data Project dataset, we have 13 different schools of philosophy. This including Analytic, Aristotle, Capitalism, Communism, Continental, Empiricism，Feminism, German Idealism, Nietzsche, Phenomenology, Plato, Rationalism and Stoicism. Among these 13 different schools of philosophy, are there any connection or similarity between different schools?
