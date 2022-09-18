@@ -2,7 +2,85 @@
 title: "GU5243 Project1 Data Story"
 output: html_notebook
 ---
-#Introduction
-Philosophy is the systematized study of general and fundamental questions. There are more than 100 different schools of philosophy in the world. Some of them are interested in natural question, such as astronomy, medicine and physics. Others discuss the questions like psychology, sociology and economics, etc. 
+# Introduction
+Philosophy is the systematized study of general and fundamental questions. There are more than 100 different schools of philosophy in the world. Some of them are interested in natural topics, such as astronomy, medicine and physics. Others discuss the questions like psychology, sociology and economics, etc. 
 
-In our Philosophy Data Project dataset, we have 13 different schools of philosophy. This including Analytic, Aristotle, Capitalism, Communism, Continental, Empiricism，Feminism, German Idealism, Nietzsche, Phenomenology, Plato, Rationalism and Stoicism. Among these 13 different schools of philosophy, are there any connection or similarity between different schools?
+In our Philosophy Data Project dataset, we have 360808 quotes from 13 different schools of philosophy. This including Analytic, Aristotle, Capitalism, Communism, Continental, Empiricism，Feminism, German Idealism, Nietzsche, Phenomenology, Plato, Rationalism and Stoicism. The distribution of quotes from each school is as below,
+
+```{r,echo = FALSE, message=FALSE, warning= FALSE}
+#import packages
+library(dplyr)
+library(ggplot2)
+library(tidytext)
+library(wordcloud)
+library(RColorBrewer)
+library(tidyr)
+library(reshape2)
+library(cluster)
+library(factoextra)
+library(scales)
+library(cluster)
+library(factoextra)
+```
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE}
+data <- read.csv("/Users/xxxxoxygene/Downloads/Columbia University/Fall2022/STAT4243/Project1/fall2022-project1-judywu4800/data/philosophy_data.csv")
+knitr::opts_chunk$set(fig.width=unit(15,"cm"), fig.height=unit(10,"cm"))
+data%>% 
+  group_by(school)%>%
+  count(school)%>%
+  ggplot(data=.,aes(x=school,y=n))+
+    geom_bar(stat="identity")+
+    geom_text(aes(label=n),vjust=-0.3,size=2)+
+    theme(axis.text.x = element_text(angle=45,hjust=1))+
+    labs(title = "Number of Quotes in Each School")+
+    ylab("Number of Quotes")
+```
+
+Among these 13 different schools of philosophy, are there any connection or similarity between different schools? More specifically, are there any schools interested in similar topics, and if these schools of philosophy convey same type of sentiment through their text?
+
+First, I process the data using "tidytext" package to transform our dataset into tidy text format, i.e. break the sentences into single words, so that we can analyze the frequency that these words appears in the philosphy text, also analyze the sentiment these words convey. I also removed the words that are not useful for our analysis, typically extremely common words such as “the”, “of”, “to”.
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE}
+philo_data <- data%>%
+  select(school,author,title,sentence_length,tokenized_txt)%>%
+  group_by(school)%>%
+  mutate(sentence.no = row_number())
+
+listname <- sort(unique(philo_data$school))
+colnames(philo_data)[5] <- "text"
+philo_school <- group_split(philo_data)
+#get tidy text format for each school of text
+philo_school_tidy <- list()
+for(i in 1:13){
+  philo_school_tidy[[i]] <- philo_school[[i]]%>%
+    unnest_tokens(word,text)
+}
+names(philo_school_tidy) <- listname
+
+#exclude stop words from the tidy text
+data("stop_words")
+
+for (i in 1:13) {
+  philo_school_tidy[[i]] <- philo_school_tidy[[i]]%>%
+    anti_join(stop_words)
+}
+```
+
+
+# Word Frequency
+
+In the following section, I will first use word cloud to visualize the most frequent words in the quotes of each schools. And I will use k-means clustering algorithm to see how the topics that the schools discussed are similar to each other.
+
+```{r, echo = FALSE, message=FALSE, warning= FALSE}
+word_freq <- list()
+for(i in 1:13){
+  word_freq[[i]] <- philo_school_tidy[[i]]%>%
+    count(word,sort=T) 
+}
+names(word_freq) <- listname
+```
+## Word Cloud
+
+
+
