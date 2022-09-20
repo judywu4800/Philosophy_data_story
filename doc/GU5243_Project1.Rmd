@@ -1,9 +1,7 @@
 ---
 title: "GU5243 Project1: Are There Any Links Between Philosophical Schools？"
+output: html_document
 runtime: shiny
-output:
-  html_document: default
-  html_notebook: default
 ---
 # Introduction
 Philosophy is the systematized study of general and fundamental questions. There are more than 100 different schools of philosophy in the world. Some of them are interested in natural topics, such as astronomy, medicine and physics. Others discuss the questions like psychology, sociology and economics, etc. 
@@ -35,7 +33,7 @@ data%>%
   group_by(school)%>%
   count(school)%>%
   ggplot(data=.,aes(x=school,y=n))+
-    geom_bar(stat="identity")+
+    geom_bar(stat="identity",fill="#6baed6")+
     geom_text(aes(label=n),vjust=-0.3,size=2)+
     theme(axis.text.x = element_text(angle=45,hjust=1))+
     labs(title = "Number of Quotes in Each School")+
@@ -96,7 +94,7 @@ philo_wf_all <- philo_tidy_all%>%
 ```
 ## Word Cloud Visualization
 
-Below is the word cloud of our entire dataset. In the word cloud plot, the larger the word is displayed, the higher the frequency it appears in the text dataset. We first look at the words with top frequency in the whole dataset. From the word cloud, we can see that "time" is the most frequent word that appears in the philosophy text. Other words like "time", "world", "nature", reason", "body" and "truth" are also very frequently in the philosophy quotes that we have. From this plot, we can get a sense of the popular topics discussed in philosophy text.
+Below is the word cloud of our entire dataset. In the word cloud plot, the larger the word is displayed, the higher the frequency it appears in the corpus. We first look at the words with top frequency in the whole dataset. From the word cloud, we can see that "time" is the most frequent word that appears in the philosophy text. Other words like "time", "world", "nature", reason", "body" and "truth" also very frequently appear in the philosophy quotes that we have. From this plot, we can get a sense of the popular topics discussed in philosophy text.
 
 ```{r,echo=FALSE, warning=FALSE}
 wordclous_all <- philo_tidy_all%>%
@@ -164,7 +162,7 @@ shinyApp(
 
 ```
 
-We can see that words, such as "nature", "world", "people" and "time", are very common among all schools. It is noteworthy that all schools of thoughts mentioned human-related words, such as "life", "mind", "body". Among these schools, Nietzsche, Rationalism and Plato seem to talk more about "spirit","soul" and "god", while Empiricism, German Idealism, Analytic, Aristotle and Continental seems to talk about "mind", "sense" and some emotions. As another popular topic, "nature", "universe" and worlds" appear frequently in over 9 schools. Moreover, words like "money" and "capital" are frequently mentioned in Capitalism and Communism's text and are not common in other philosophy schools. Some archaic words like "thou" also seem unique for Nietzsche and Stoicism. 
+We can see that words, such as "nature", "world", "people" and "time", are very common among all schools. It is noteworthy that all schools of thoughts mentioned human-related words, such as "life", "mind", "body". Among these schools, Nietzsche, Rationalism and Plato seem to talk more about "spirit","soul" and "god", while Empiricism, German Idealism, Analytic, Aristotle and Continental seems to talk about "mind", "sense" and some emotions. As another popular topic, "nature", "universe" and worlds" appear frequently in over 9 schools. Moreover, words like "money" and "capital" are frequently mentioned in Capitalism and Communism's quotes and are not common in other philosophy schools. Some archaic words like "thou" also seem unique for Nietzsche and Stoicism. 
 
 Although we can roughly recognize the similarity or common topics discussed by different schools of thoughts, the word cloud does not show us clearly the relationship between the word frequency in the quotes from different schools. We can apply K-Means clustering to group different schools together and see how their use of word similar to each other.
 
@@ -184,15 +182,14 @@ wf_clustering <- as.data.frame(wf_clustering)
 rownames(wf_clustering) <- colnames(philo_prop)
 names(wf_clustering) <- as.vector(words)
 wf_cluster <- kmeans(wf_clustering,centers = 3, nstart=25)
-wf_cluster$cluster
 fviz_cluster(wf_cluster,wf_clustering)
 ```
 
-We use the K-Means clustering to group the 13 schools of philosophy into 3 groups according to the proportion of words in the text of each school. The above plot shows us the clustering result. Phenomenology, German Idealism, Analytic and Continental are in the same group. Capitalism, Communism, Feminism, Aristotle, Plato and Nietzsche are grouped together. And the last group contains Rationalism Empiricism and Stoicism. It is noteworthy that the result somehow corresponds to our preception after comparing the word clouds. Especially, the Capitalism and Communism which discuss "money" and "capital" more are grouped together. And the Nietzsche and Stoicism, which use archaic words like "thou", are in the same group.
+We use the K-Means clustering to group the 13 schools of philosophy into 3 groups according to the proportion of words in the text of each school. The above plot shows us the clustering result. Phenomenology, German Idealism, Analytic and Continental are in the same group. Capitalism, Communism, Feminism, Aristotle, Plato and Nietzsche are grouped together. And the last group contains Rationalism Empiricism and Stoicism. It is noteworthy that the result somehow corresponds to our perception after comparing the word clouds. Especially, the Capitalism and Communism which discuss "money" and "capital" more are grouped together. And the Nietzsche and Stoicism, which use archaic words like "thou", are in the same group.
 
 # Sentiment Analysis
 
-Beside analyzing the similarity of the use of words, I am also interested in exploring whether there are some similarity of sentiment coveyed through the text of different schools. In the following section, I use the nrc lexicon to get the sentiment of the words in the philosophy text. I will analyze the distribution of different type of emotions, and use K-Means clustering to see the relationship between schools according to their sentiment score.
+Beside analyzing the similarity of the use of words, I am also interested in exploring whether there are some similarity of sentiment conveyed through the text of different schools. In the following section, I use the nrc lexicon to get the sentiment of the words in the philosophy text. I will analyze the distribution of different type of emotions, and use K-Means clustering to see the relationship between schools according to their sentiment score.
 
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 philo_sentiment_nrc <- philo_tidy_all%>%
@@ -209,7 +206,7 @@ philo_sentiment_nrc%>%
   labs(x="sentiment",y=NULL)
 ```
 
-The above plot displays the distribution of sentiment in the text of each school. It is surprising that all classes show a similar distribution. The words with positive sentiment appear always the most frequent in all classes and words with either trust or negative sentiment is the second most common in the text. 
+The above plot displays the distribution of sentiment in the text of each school. It is surprising that all classes show a similar shape. The words with positive sentiment appear always the most frequent in all classes and words with either trust or negative sentiment is the second most common in the text. 
 
 Since the above plot shows only a very general distribution of sentiment in text, to see the connection and the similarity of sentiment conveyed through the text of schools, we conduct the K-Means Clustering again to group schools into 3 groups according to their sentiment distribution. Here, I use the counts of each type of sentiment in the text from each schools as features.
 
@@ -234,15 +231,20 @@ The clustering result shows that the Phenomenology, Analytic and German Idealism
 We can check the distribution plot of the sentiment of schools in each group to see if they share some similarity in sentiment. The plot below displays the sentiment distribution of each group by rows. Compare the shapes of bar plots of each row, we can find that although they differ slightly, the general shapes in each group are very close to each other, meaning that the sentiment conveyed in the text of schools are very close in each group. 
 ```{r, echo=FALSE, message=FALSE, warning= FALSE}
 target <- c("capitalism","rationalism","communism","plato","empiricism","continental","aristotle","feminism","nietzsche","stoicism","phenomenology","analytic","german_idealism")
+
+philo_sentiment_nrc$school_ordered <-factor(philo_sentiment_nrc$school, levels=target)
 philo_sentiment_nrc1 <- philo_sentiment_nrc%>%
   group_by(school)%>%
   count(sentiment)%>%
   arrange(factor(school, levels=target))
-philo_sentiment_nrc1%>%
-  ggplot(aes(n,sentiment,fill=school))+
+
+philo_sentiment_nrc%>%
+  group_by(school_ordered)%>%
+  count(sentiment)%>%
+  ggplot(aes(n,sentiment,fill=school_ordered))+
   geom_col(show.legend = F)+
   theme(axis.text.x = element_text(size=5,angle=0,hjust=1),axis.text.y = element_text(size=5))+
-  facet_wrap(~school, ncol=5, scale="free")+
+  facet_wrap(.~school_ordered, ncol=5, scale="free")+
   labs(x="sentiment",y=NULL)
 ```
 
@@ -250,4 +252,4 @@ Also, we can find that the clustering result according to the sentiment distribu
 
 # Conclusion
 
-From 380, 000 texts, we conducted word frequency analysis and sentiment analysis, and used K-Means clustering to try to find associations between different philosophical schools. From the results, we can see that there is connection between many schools, some of which are similar in terms of words, others convey similar emotions. By comparing the two clustering results, we can find that Communism, Capitalism and Plato share similarity on both sentiment and the use of words. Phenomenology, Analytic and German Idealism are also deeply related to each other in terms of words and sentiment. Also, there seems to be some connection between Empiricism and Ratonalism according to our analysis. All in all, although the thousands of philosophical texts and the thirteen schools seem to be very disorganized and overwhelming, there is actually internal connection between them, both in terms of words and in terms of sentiment they convey.
+From 380, 000 texts, we conducted word frequency analysis and sentiment analysis, and used K-Means clustering to try to find associations between different philosophical schools. From the results, we can see that there is connection between many schools, some of which are similar in terms of words, others convey similar emotions. By comparing the two clustering results, we can find that Communism, Capitalism and Plato share similarity on both sentiment and the use of words. Phenomenology, Analytic and German Idealism are also deeply related to each other in terms of words and sentiment. Also, there seems to be some connection between Empiricism and Rationalism according to our analysis. All in all, although the thousands of philosophical texts and the thirteen schools seem to be very disorganized and overwhelming, there is actually internal connection between them, both in terms of words and in terms of sentiment they convey.
