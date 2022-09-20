@@ -9,10 +9,10 @@ This is the first and only *individual* (as opposed to *team*) project this seme
 
 Term: Fall 2022
 
-+ Projec title: Lorem ipsum dolor sit amet
-+ This project is conducted by [your name]
++ Projec title: Are There Any Links Between Philosophical Schools？
++ This project is conducted by Judy Wu
 
-+ Project summary: [a short summary] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
++ Project summary: Philosophy is the systematized study of general and fundamental questions. In our philosophy dataset, we have over 380,000 quotes from 13 different schools of philosophy. This project is to explore if there are any similarity or relationship between these schools. I conducted exploratory data analysis on both the word frequency of schools and the sentiment they conveyed.
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
