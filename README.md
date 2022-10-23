@@ -2,7 +2,6 @@
 
 <img src="figs/100126-the-glass.jpeg" width="500">
 
-### [Project Description](doc/)
 This is the exploratory data analysis project for STAT GU4243 Applied Data Science. 
 
 Term: Fall 2022
