@@ -6,7 +6,7 @@ This is the exploratory data analysis project for STAT GU4243 Applied Data Scien
 
 Term: Fall 2022
 
-+ Projec title: Are There Any Links Between Philosophical Schools？
++ Project title: Are There Any Links Between Philosophical Schools？
 + This project is conducted by Judy Wu
 
 + Project summary: Philosophy is the systematized study of general and fundamental questions. In our philosophy dataset, we have over 380,000 quotes from 13 different schools of philosophy. This project is to explore if there are any similarity or relationship between these schools. I conducted exploratory data analysis on both the word frequency of schools and the sentiment they conveyed.
